@@ -4,12 +4,11 @@ from django.views.generic import View
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from django.views.decorators.cache import cache_control
 
 
 # Create your views here.
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+
 def log_in(request):
     if request.method == "GET":
         form = AuthenticationForm()

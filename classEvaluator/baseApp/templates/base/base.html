@@ -86,9 +86,29 @@
     <div class="navbar-nav">
       <div class="nav-item text-nowrap">
         {% if user.is_authenticated %}
-        <a class="nav-link px-3" href="{% url 'log_out' %}">Sign out</a>
+        <table>
+          <tr>
+            <td>
+              <a class="nav-link align-items-center" href="#" style="padding-right: 20px;">
+                <span data-feather="user" href="#"></span> My account
+              </a>
+            </td>
+            <td> | </td>
+            <td>
+              <a class="nav-link align-items-center" href="{% url 'log_out' %}" style="padding-right: 20px;">
+                <span data-feather="log-out" href="#"></span> Log out
+              </a>
+            </td>
+          </tr>
+        </table>
+
+
+
         {% else %}
-        <a class="nav-link px-3" href="{% url 'log_in' %}">Sign in</a>
+
+        <a class="nav-link align-items-center" href="{% url 'log_in' %}" style="padding-right: 20px;">
+          <span data-feather="log-in" href="#"></span> Log in
+        </a>
         {% endif %}
       </div>
     </div>
@@ -104,27 +124,28 @@
         <div class="position-sticky pt-3 sidebar-sticky">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
+              <a class="nav-link active" aria-current="page" href="{% url 'index'%}">
                 <span data-feather="home" class="align-text-bottom"></span>
                 Dashboard
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
-                <span data-feather="file" class="align-text-bottom"></span>
-                Orders
+                <span data-feather="code" class="align-text-bottom"></span>
+                My activities
               </a>
             </li>
+            <!--
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span data-feather="shopping-cart" class="align-text-bottom"></span>
                 Products
               </a>
-            </li>
+            </li>-->
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span data-feather="users" class="align-text-bottom"></span>
-                Customers
+                My group
               </a>
             </li>
             <li class="nav-item">
@@ -136,25 +157,28 @@
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span data-feather="layers" class="align-text-bottom"></span>
-                Integrations
+                Repositories
               </a>
             </li>
           </ul>
 
-          <h6
-            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-            <span>Saved reports</span>
-            <a class="link-secondary" href="#" aria-label="Add a new report">
-              <span data-feather="plus-circle" class="align-text-bottom"></span>
-            </a>
-          </h6>
+
+          <hr>
+
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
               <a class="nav-link" href="#">
-                <span data-feather="file-text" class="align-text-bottom"></span>
-                Current month
+                <span data-feather="info" class="align-text-bottom"></span>
+                About the app
               </a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="github" class="align-text-bottom"></span>
+                Colaborate
+              </a>
+            </li>
+            <!--
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span data-feather="file-text" class="align-text-bottom"></span>
@@ -174,6 +198,7 @@
               </a>
             </li>
           </ul>
+          -->
         </div>
       </nav>
 
