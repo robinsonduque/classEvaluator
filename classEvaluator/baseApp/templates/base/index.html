@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+This web application will be used for the FLP class.
+
+{% else %}
+<div style="padding: 10px;"></div>
+<div class="alert alert-warning" role="alert">
+  User requires to authenticate
+</div>
+
+{% endif %}
+
+{% endblock %}
