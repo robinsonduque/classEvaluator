@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import log_in, log_out
+from .views import log_in, log_out, update_user
 
 urlpatterns = [
-    
-    path("login/", log_in, name="log_in" ),
-    path("logout/", log_out, name="log_out" ),
+    path("login/", log_in, name="log_in"),
+    path("logout/", log_out, name="log_out"),
+    path("updateUser", update_user, name="update_user"),
 ]

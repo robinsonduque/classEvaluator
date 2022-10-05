@@ -1,7 +1,7 @@
-
 from django.shortcuts import render, redirect, HttpResponse
 from django.views.generic import View
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 
@@ -23,9 +23,9 @@ def log_in(request):
                 login(request, usuario)
                 return redirect("index")
             else:
-                messages.error(request, "Usuario no válido")
+                messages.error(request, "User not valid")
         else:
-            messages.error(request, "Información incorrecta")
+            messages.error(request, "Incorrect information")
 
         return render(request, "login/iniciar_sesion.html", {"form": form})
 
@@ -33,3 +33,19 @@ def log_in(request):
 def log_out(request):
     logout(request)
     return redirect("log_in")
+
+
+def update_user(request):
+    if request.method == "GET":
+        form = PasswordChangeForm(None)
+        return render(request, "updateUser/update_password.html", {"form": form})
+    elif request.method == "POST":
+        form = PasswordChangeForm(request.user, data=request.POST)
+        if form.is_valid() and form.clean_old_password() and form.clean_new_password2():
+            form.save()
+            # update_session_auth_hash(request, form.user)
+            return redirect("/")
+        else:
+            messages.error(request, "Incorrect information")
+
+    return render(request, "updateUser/update_password.html", {"form": form})
