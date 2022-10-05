@@ -4,7 +4,12 @@
 
 {% if user.is_authenticated %}
 
-This web application will be used for the FLP class.
+<br>
+Welcome {{ user.get_username }},
+
+<br><br>
+
+In this section we will have a dash board depicting your performance in class.
 
 {% else %}
 <div style="padding: 10px;"></div>
