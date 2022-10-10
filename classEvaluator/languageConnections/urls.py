@@ -15,14 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import racketConnection, minizincConnection
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include("authentication.urls")),
-    path("", include("baseApp.urls")),
-    path("", include("classActivities.urls")),
-    path("", include("classGroups.urls")),
-    path("", include("classReports.urls")),
-    path("", include("classRepositories.urls")),
-    # path("", include("languageConnections.urls")),
+    path("racketConnection", racketConnection, name="racketConnection"),
+    path("minizincConnection", minizincConnection, name="minizincConnection"),
 ]

@@ -1,0 +1,22 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<br>
+Welcome {{ user.get_username }},
+
+<br><br>
+
+In this section we will have an app for groups.
+
+{% else %}
+<div style="padding: 10px;"></div>
+<div class="alert alert-warning" role="alert">
+  User requires to authenticate
+</div>
+
+{% endif %}
+
+{% endblock %}

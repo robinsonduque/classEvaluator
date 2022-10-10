@@ -15,14 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import groups
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include("authentication.urls")),
-    path("", include("baseApp.urls")),
-    path("", include("classActivities.urls")),
-    path("", include("classGroups.urls")),
-    path("", include("classReports.urls")),
-    path("", include("classRepositories.urls")),
-    # path("", include("languageConnections.urls")),
+    path("groups", groups, name="groups"),
 ]
