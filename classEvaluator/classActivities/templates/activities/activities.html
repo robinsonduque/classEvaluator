@@ -5,17 +5,62 @@
 {% if user.is_authenticated %}
 
 <br>
-Welcome {{ user.get_username }},
+
 
 <br><br>
 
-In this section we will have an app for activities.
+My activities per class:
+
+<hr>
+{% for subject in subjects %}
+
+<br>
+<div class="card">
+  <div class="card-header">
+    <h4>{{subject.name}}</h4>
+  </div>
+
+  <div class="card-body">
+
+    <table class="table  table-hover">
+      <thead>
+        <tr aria-colspan="2">
+          <th scope="col">Activity Name</th>
+          <th scope="col">Availibility</th>
+          <th scope="col">Grade Scale</th>
+          <th scope="col">Exercises</th>
+          <th scope="col">Options</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for act in subject.activity_set.all %}
+        <tr>
+          <td>{{ act }}</td>
+          <td>{{ act.available_from }} / {{ act.available_until }} </td>
+          <td>{{ act.grade_scale }} </td>
+          <td>{{ act.activityexercise_set.count}} </td>
+          <td>
+            <a class="btn btn-primary btn-sm" href="#" role="button"> Edit </a>
+            <a class="btn btn-danger btn-sm" href="#" role="button"> Delete </a>
+          </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a type="button" class="btn btn-success btn-sm" href="#">Create</a>
+  </div>
+</div>
+{% endfor %}
+
 
 {% else %}
 <div style="padding: 10px;"></div>
 <div class="alert alert-warning" role="alert">
   User requires to authenticate
 </div>
+
 
 {% endif %}
 
