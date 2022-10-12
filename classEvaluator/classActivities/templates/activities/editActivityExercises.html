@@ -1,0 +1,66 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<br>
+
+
+<br><br>
+
+<div class="card">
+    <div class="card-header">
+        <h4>{{subject_name}} - New Activity</h4>
+    </div>
+
+    <div class="card-body">
+        <form method="post" action="">
+            {%csrf_token%}
+            <table>
+                {{form.as_table}}
+            </table>
+            <!-- <input type="hidden" id="subject" value="{{subject_id}}"> -->
+            <input type="submit" class="btn btn-success btn-sm" value="Save">
+        </form>
+
+        <br>
+        {% if form.errors %}
+
+        {% for key,value in form.errors.items %}
+        <p style="color: red;">
+            {{ value.as_text|escape }}
+        </p>
+        {% endfor %}
+        {% endif %}
+
+        {% for message in messages %}
+        <tr>
+            <th colspan="3" style="text-align: center;">
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    {{ message }}
+                </div>
+            </th>
+
+        </tr>
+        {% endfor %}
+
+
+
+    </div>
+</div>
+
+
+
+
+{% else %}
+<div style="padding: 10px;"></div>
+<div class="alert alert-warning" role="alert">
+    User requires to authenticate
+</div>
+
+
+{% endif %}
+
+{% endblock %}

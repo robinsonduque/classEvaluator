@@ -34,22 +34,41 @@ My activities per class:
       </thead>
 
       <tbody>
-        {% for act in subject.activity_set.all %}
+        {% for act in subject.activity_set.all|dictsort:"id" %}
         <tr>
           <td>{{ act }}</td>
           <td>{{ act.available_from }} / {{ act.available_until }} </td>
           <td>{{ act.grade_scale }} </td>
-          <td>{{ act.activityexercise_set.count}} </td>
           <td>
-            <a class="btn btn-primary btn-sm" href="#" role="button"> Edit </a>
-            <a class="btn btn-danger btn-sm" href="#" role="button"> Delete </a>
+            <a class="btn btn-outline-primary btn-sm" href="#" role="button">
+              <span data-feather="file-plus" class="align-text-bottom"></span>
+            </a>
+
+            <a class="btn btn-outline-danger btn-sm" href="#" role="button">
+              <span data-feather="edit-3" class="align-text-bottom"></span>
+            </a>
+            {{ act.activityexercise_set.count}}
+
+          </td>
+          <td>
+            <a class="btn btn-primary btn-sm" href="#" role="button">
+              <span data-feather="eye" class="align-text-bottom"></span>
+            </a>
+            <a class="btn btn-primary btn-sm" href="{% url 'editActivitiesExercises' subject.id  subject.name act.id %}"
+              role="button">
+              <span data-feather="edit" class="align-text-bottom"></span>
+            </a>
+            <a class="btn btn-danger btn-sm" href="#" role="button">
+              <span data-feather="trash" class="align-text-bottom"></span>
+            </a>
           </td>
 
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <a type="button" class="btn btn-success btn-sm" href="#">Create</a>
+    <a type="button" class="btn btn-success btn-sm"
+      href="{% url 'createActivity' subject.id  subject.name %}">Create</a>
   </div>
 </div>
 {% endfor %}

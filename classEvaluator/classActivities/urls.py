@@ -15,8 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import activities
+from .views import activities, createActivity, editActivitiesExercises
 
 urlpatterns = [
     path("activities", activities, name="activities"),
+    path(
+        "createActivity/<int:subject_id>/<str:subject_name>/",
+        createActivity,
+        name="createActivity",
+    ),
+    path(
+        "editActivitiesExercises/<int:subject_id>/<str:subject_name>/<int:activity_id>/",
+        editActivitiesExercises,
+        name="editActivitiesExercises",
+    ),
 ]
