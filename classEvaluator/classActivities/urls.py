@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import activities, createActivity, editActivitiesExercises
+from .views import (
+    activities,
+    createActivity,
+    editActivitiesExercises,
+    createSubject,
+    deleteSubject,
+    editSubject,
+    deleteActivity,
+)
 
 urlpatterns = [
     path("activities", activities, name="activities"),
@@ -28,5 +36,13 @@ urlpatterns = [
         "editActivitiesExercises/<int:subject_id>/<str:subject_name>/<int:activity_id>/",
         editActivitiesExercises,
         name="editActivitiesExercises",
+    ),
+    path("deleteActivity/<int:activity_id>", deleteActivity, name="deleteActivity"),
+    path("createSubject/", createSubject, name="createSubject"),
+    path("deleteSubject/<int:subject_id>", deleteSubject, name="deleteSubject"),
+    path(
+        "editSubject/<int:subject_id>/<str:subject_name>/",
+        editSubject,
+        name="editSubject",
     ),
 ]

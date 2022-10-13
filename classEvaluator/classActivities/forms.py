@@ -13,3 +13,7 @@ class ActivityForm(forms.Form):
     )
     grade_scale = forms.IntegerField(label="Grade scale", max_value=100, min_value=0)
     subject = forms.IntegerField(widget=forms.HiddenInput())
+
+
+class SubjectForm(forms.Form):
+    name = forms.CharField(label="Subject name", max_length=100, required=True)

@@ -5,11 +5,32 @@
 {% if user.is_authenticated %}
 
 <br>
+{% for message in messages %}
+<tr>
+  <th colspan="3" style="text-align: center;">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      {{ message }}
+    </div>
+  </th>
+
+</tr>
+{% endfor %}
 
 
 <br><br>
+<div style="float: right;">
+  <a class="btn btn-success btn-sm" href="{%url 'createSubject'%}" role="button">
+    <span data-feather="file-plus" class="align-text-bottom"></span> New Class Subject
+  </a>
+</div>
+<h4>Activities per Class Subject:</h4>
 
-My activities per class:
+
+
+
+
+
 
 <hr>
 {% for subject in subjects %}
@@ -17,7 +38,15 @@ My activities per class:
 <br>
 <div class="card">
   <div class="card-header">
-    <h4>{{subject.name}}</h4>
+    <h4>
+      <a class="btn btn-primary btn-sm" href="{% url 'editSubject' subject.id subject.name%}" role="button">
+        <span data-feather="edit" class="align-text-bottom"></span></a>
+      {% if not subject.activity_set.all %}
+      <a class="btn btn-danger btn-sm" href="{%url 'deleteSubject' subject.id%}" role="button">
+        <span data-feather="trash" class="align-text-bottom"></span></a>
+      {% endif %}
+      {{subject.name}}
+    </h4>
   </div>
 
   <div class="card-body">
@@ -58,9 +87,11 @@ My activities per class:
               role="button">
               <span data-feather="edit" class="align-text-bottom"></span>
             </a>
-            <a class="btn btn-danger btn-sm" href="#" role="button">
+            {% if act.activityexercise_set.count == 0 %}
+            <a class="btn btn-danger btn-sm" href="{%url 'deleteActivity' act.id%}" role="button">
               <span data-feather="trash" class="align-text-bottom"></span>
             </a>
+            {% endif %}
           </td>
 
         </tr>
@@ -72,7 +103,7 @@ My activities per class:
   </div>
 </div>
 {% endfor %}
-
+<br><br>
 
 {% else %}
 <div style="padding: 10px;"></div>
