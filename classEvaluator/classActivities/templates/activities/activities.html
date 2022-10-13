@@ -5,6 +5,7 @@
 {% if user.is_authenticated %}
 
 <br>
+<!--Message management-->
 {% for message in messages %}
 <tr>
   <th colspan="3" style="text-align: center;">
@@ -19,6 +20,7 @@
 
 
 <br><br>
+<!--New Subject-->
 <div style="float: right;">
   <a class="btn btn-success btn-sm" href="{%url 'createSubject'%}" role="button">
     <span data-feather="file-plus" class="align-text-bottom"></span> New Class Subject
@@ -39,9 +41,11 @@
 <div class="card">
   <div class="card-header">
     <h4>
+      <!--Edit Subject-->
       <a class="btn btn-primary btn-sm" href="{% url 'editSubject' subject.id subject.name%}" role="button">
         <span data-feather="edit" class="align-text-bottom"></span></a>
       {% if not subject.activity_set.all %}
+      <!--Delete Subject if it does not containt activities-->
       <a class="btn btn-danger btn-sm" href="{%url 'deleteSubject' subject.id%}" role="button">
         <span data-feather="trash" class="align-text-bottom"></span></a>
       {% endif %}
@@ -69,10 +73,11 @@
           <td>{{ act.available_from }} / {{ act.available_until }} </td>
           <td>{{ act.grade_scale }} </td>
           <td>
+            <!--Add Exercise to activity-->
             <a class="btn btn-outline-primary btn-sm" href="#" role="button">
               <span data-feather="file-plus" class="align-text-bottom"></span>
             </a>
-
+            <!--Edit Excercises-->
             <a class="btn btn-outline-danger btn-sm" href="#" role="button">
               <span data-feather="edit-3" class="align-text-bottom"></span>
             </a>
@@ -80,13 +85,16 @@
 
           </td>
           <td>
+            <!--View Activity-->
             <a class="btn btn-primary btn-sm" href="#" role="button">
               <span data-feather="eye" class="align-text-bottom"></span>
             </a>
-            <a class="btn btn-primary btn-sm" href="{% url 'editActivitiesExercises' subject.id  subject.name act.id %}"
+            <!--Edit Activity-->
+            <a class="btn btn-primary btn-sm" href="{% url 'editActivity' subject.id  subject.name act.id %}"
               role="button">
               <span data-feather="edit" class="align-text-bottom"></span>
             </a>
+            <!--Delete Activity if it does not contain exercises-->
             {% if act.activityexercise_set.count == 0 %}
             <a class="btn btn-danger btn-sm" href="{%url 'deleteActivity' act.id%}" role="button">
               <span data-feather="trash" class="align-text-bottom"></span>
@@ -98,6 +106,7 @@
         {% endfor %}
       </tbody>
     </table>
+    <!--Create Activity in a specific class subject-->
     <a type="button" class="btn btn-success btn-sm"
       href="{% url 'createActivity' subject.id  subject.name %}">Create</a>
   </div>

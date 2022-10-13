@@ -18,7 +18,7 @@ from django.urls import path, include
 from .views import (
     activities,
     createActivity,
-    editActivitiesExercises,
+    editActivity,
     createSubject,
     deleteSubject,
     editSubject,
@@ -33,9 +33,9 @@ urlpatterns = [
         name="createActivity",
     ),
     path(
-        "editActivitiesExercises/<int:subject_id>/<str:subject_name>/<int:activity_id>/",
-        editActivitiesExercises,
-        name="editActivitiesExercises",
+        "editActivity/<int:subject_id>/<str:subject_name>/<int:activity_id>/",
+        editActivity,
+        name="editActivity",
     ),
     path("deleteActivity/<int:activity_id>", deleteActivity, name="deleteActivity"),
     path("createSubject/", createSubject, name="createSubject"),

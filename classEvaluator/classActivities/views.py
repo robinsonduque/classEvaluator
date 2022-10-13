@@ -48,7 +48,7 @@ def createActivity(request, subject_id, subject_name):
         )
 
 
-def editActivitiesExercises(request, subject_id, subject_name, activity_id):
+def editActivity(request, subject_id, subject_name, activity_id):
 
     if request.method == "GET":
         activity = Activity.objects.get(id=activity_id)
@@ -64,7 +64,7 @@ def editActivitiesExercises(request, subject_id, subject_name, activity_id):
 
         return render(
             request,
-            "activities/editActivityExercises.html",
+            "activities/editActivity.html",
             {"form": form, "subject_id": subject_id, "subject_name": subject_name},
         )
     else:
@@ -92,7 +92,7 @@ def editActivitiesExercises(request, subject_id, subject_name, activity_id):
                 )
                 return render(
                     request,
-                    "activities/editActivityExercises.html",
+                    "activities/editActivity.html",
                     {
                         "form": form,
                         "subject_id": subject_id,
