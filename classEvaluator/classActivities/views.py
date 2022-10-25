@@ -2,19 +2,24 @@ from django.shortcuts import render, HttpResponse
 from .models import Subject, Activity
 from .forms import ActivityForm, SubjectForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 
+@login_required(login_url="login/")
 def activities(request):
-    subjects = Subject.objects.filter().order_by("id")
+    subjects = Subject.objects.filter(author=request.user).order_by("id")
     return render(request, "activities/activities.html", {"subjects": subjects})
 
 
+@login_required(login_url="login/")
 def createActivity(request, subject_id, subject_name):
     if request.method == "GET":
         form = ActivityForm()
-        form.fields["subject"].initial = subject_id  # Hidden field for the class subjec
+        form.fields[
+            "subject"
+        ].initial = subject_id  # Hidden field for the class subject
         return render(
             request,
             "activities/createActivity.html",
@@ -48,17 +53,26 @@ def createActivity(request, subject_id, subject_name):
         )
 
 
+def validateActivityOwnership(activity, user, subject_id):
+    return activity.subject.author.id == user.id and subject_id == activity.subject.id
+
+
+@login_required(login_url="login/")
 def editActivity(request, subject_id, subject_name, activity_id):
 
     if request.method == "GET":
         activity = Activity.objects.get(id=activity_id)
+        if not validateActivityOwnership(activity, request.user, subject_id):
+            messages.error(request, "You are not allowed to do this update")
+            return activities(request)
+
         form = ActivityForm(
             data={
                 "name": activity.name,
                 "available_from": activity.available_from,
                 "available_until": activity.available_until,
                 "grade_scale": activity.grade_scale,
-                "subject": activity_id,
+                "subject": subject_id,
             }
         )
 
@@ -78,6 +92,7 @@ def editActivity(request, subject_id, subject_name, activity_id):
                 activity.available_from = request.POST.get("available_from")
                 activity.available_until = request.POST.get("available_until")
                 activity.grade_scale = request.POST.get("grade_scale")
+
                 # activity.subject = Subject.objects.get(id=request.POST.get("subject"))
 
                 activity.save()
@@ -104,9 +119,14 @@ def editActivity(request, subject_id, subject_name, activity_id):
     return activities(request)
 
 
+@login_required(login_url="login/")
 def deleteActivity(request, activity_id):
     activity = Activity.objects.get(id=activity_id)
     name = activity.name
+    if not validateActivityOwnership(activity, request.user, activity.subject.id):
+        messages.error(request, "You are not allowed to do this operation")
+        return activities(request)
+
     if not activity.activityexercise_set.all():
         activity.delete()
         messages.success(request, "The activity '%s' was deleted successfully" % name)
@@ -120,14 +140,16 @@ def deleteActivity(request, activity_id):
     return activities(request)
 
 
+@login_required(login_url="login/")
 def createSubject(request):
     if request.method == "GET":
         form = SubjectForm()
+        form.fields["author"].initial = request.user.id
         return render(request, "subject/createSubject.html", {"form": form})
     else:
         form = SubjectForm(request.POST)
         if form.is_valid():
-            subject = Subject(name=request.POST.get("name"))
+            subject = Subject(name=request.POST.get("name"), author=request.user)
             subject.save()
             messages.success(request, "The subject was created successfully")
         else:
@@ -135,10 +157,19 @@ def createSubject(request):
     return activities(request)
 
 
+def validateSubjectOwnership(subject, user):
+    return subject.author.id == user.id
+
+
+@login_required(login_url="login/")
 def deleteSubject(request, subject_id):
     subject = Subject.objects.get(id=subject_id)
     name = subject.name
-    print(subject.activity_set.all())
+
+    if not validateSubjectOwnership(subject, request.user):
+        messages.error(request, "You are not allowed to do this operation")
+        return activities(request)
+
     if not subject.activity_set.all():
         subject.delete()
         messages.success(request, "The subject '%s' was deleted successfully" % name)
@@ -152,17 +183,25 @@ def deleteSubject(request, subject_id):
     return activities(request)
 
 
+@login_required(login_url="login/")
 def editSubject(request, subject_id, subject_name):
     if request.method == "GET":
-        form = SubjectForm(data={"name": subject_name})
+        subject = Subject.objects.get(id=subject_id)
+        if not validateSubjectOwnership(subject, request.user):
+            messages.error(request, "You are not allowed to do this operation")
+            return activities(request)
+        form = SubjectForm(data={"name": subject_name, "author": request.user.id})
         return render(request, "subject/editSubject.html", {"form": form})
     else:
         form = SubjectForm(request.POST)
         if form.is_valid():
             subject = Subject.objects.get(id=subject_id)
-            subject.name = request.POST.get("name")
-            subject.save()
-            messages.success(request, "The subject was updated successfully")
+            if request.user.id == subject.author.id:
+                subject.name = request.POST.get("name")
+                subject.save()
+                messages.success(request, "The subject was updated successfully")
+            else:
+                messages.error(request, "The subject could not be updated")
         else:
             messages.error(request, "The subject could not be updated")
     return activities(request)

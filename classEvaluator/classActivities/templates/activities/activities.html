@@ -58,17 +58,36 @@
     <table class="table  table-hover">
       <thead>
         <tr aria-colspan="2">
+          <th scope="col" style="width:12%">Options</th>
           <th scope="col">Activity Name</th>
           <th scope="col">Availibility</th>
           <th scope="col">Grade Scale</th>
           <th scope="col">Exercises</th>
-          <th scope="col">Options</th>
         </tr>
       </thead>
 
       <tbody>
         {% for act in subject.activity_set.all|dictsort:"id" %}
         <tr>
+          <td style="text-align: right;">
+            <!--Delete Activity if it does not contain exercises-->
+            {% if act.activityexercise_set.count == 0 %}
+            <a class="btn btn-outline-danger btn-sm" href="{%url 'deleteActivity' act.id%}" role="button">
+              <span data-feather="trash" class="align-text-bottom"></span>
+            </a>
+            {% endif %}
+            <!--View Activity-->
+            <a class="btn btn-outline-primary btn-sm" href="#" role="button">
+              <span data-feather="eye" class="align-text-bottom"></span>
+            </a>
+            <!--Edit Activity-->
+            <a class="btn btn-outline-primary btn-sm" href="{% url 'editActivity' subject.id  subject.name act.id %}"
+              role="button">
+              <span data-feather="settings" class="align-text-bottom"
+                href="{% url 'editActivity' subject.id  subject.name act.id %}"></span>
+            </a>
+          </td>
+
           <td>{{ act }}</td>
           <td>{{ act.available_from }} / {{ act.available_until }} </td>
           <td>{{ act.grade_scale }} </td>
@@ -84,31 +103,15 @@
             {{ act.activityexercise_set.count}}
 
           </td>
-          <td>
-            <!--View Activity-->
-            <a class="btn btn-primary btn-sm" href="#" role="button">
-              <span data-feather="eye" class="align-text-bottom"></span>
-            </a>
-            <!--Edit Activity-->
-            <a class="btn btn-primary btn-sm" href="{% url 'editActivity' subject.id  subject.name act.id %}"
-              role="button">
-              <span data-feather="edit" class="align-text-bottom"></span>
-            </a>
-            <!--Delete Activity if it does not contain exercises-->
-            {% if act.activityexercise_set.count == 0 %}
-            <a class="btn btn-danger btn-sm" href="{%url 'deleteActivity' act.id%}" role="button">
-              <span data-feather="trash" class="align-text-bottom"></span>
-            </a>
-            {% endif %}
-          </td>
+
 
         </tr>
         {% endfor %}
       </tbody>
     </table>
     <!--Create Activity in a specific class subject-->
-    <a type="button" class="btn btn-success btn-sm"
-      href="{% url 'createActivity' subject.id  subject.name %}">Create</a>
+    <a type="button" class="btn btn-success btn-sm" href="{% url 'createActivity' subject.id  subject.name %}">Create
+      Activity</a>
   </div>
 </div>
 {% endfor %}

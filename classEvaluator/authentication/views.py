@@ -4,12 +4,15 @@ from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 
 
 def log_in(request):
+    if request.user.is_authenticated:
+        return redirect("index")
     if request.method == "GET":
         form = AuthenticationForm()
         return render(request, "login/iniciar_sesion.html", {"form": form})
@@ -35,6 +38,7 @@ def log_out(request):
     return redirect("log_in")
 
 
+@login_required(login_url="login/")
 def update_user(request):
     if request.method == "GET":
         form = PasswordChangeForm(None)

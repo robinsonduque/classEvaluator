@@ -17,3 +17,4 @@ class ActivityForm(forms.Form):
 
 class SubjectForm(forms.Form):
     name = forms.CharField(label="Subject name", max_length=100, required=True)
+    author = forms.IntegerField(widget=forms.HiddenInput())
